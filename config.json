@@ -1,0 +1,25 @@
+{
+  "defaults": {
+    "model": "gpt-4o-mini",
+    "conversationMaxTokens": 3000,
+    "responseTokens": 200,
+    "temperature": 0.7,
+    "logPath": "logs"
+  },
+  "models": {
+    "poet": {
+      "agent_file": "agents/poet.txt",
+      "conversationMaxTokens": 300,
+      "responseTokens": 75,
+      "temperature": 0.6,
+      "model": "gpt-4o-mini"
+    },
+    "general_question_confirmer": {
+      "agent_file": "agents/general_question_confirmer.txt",
+      "conversationMaxTokens": 3000,
+      "responseTokens": 200,
+      "temperature": 0.6,
+      "model": "gpt-4o-mini"
+    }
+  }
+}
