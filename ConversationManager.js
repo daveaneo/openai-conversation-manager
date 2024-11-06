@@ -6,9 +6,18 @@
  * @dev Requires an OpenAI API key stored in a .env file, along with default configurations in config.json.
  */
 
-import fetch from 'node-fetch';
+//import fetch from 'node-fetch';
 import fs from 'fs';
 import dotenv from 'dotenv';
+
+(async () => {
+  if (typeof global.fetch === 'undefined') {
+    const fetch = await import('node-fetch');
+    global.fetch = fetch.default;
+  }
+})();
+
+
 
 // Load environment variables
 dotenv.config();
@@ -388,8 +397,9 @@ export class ConversationManager {
         console.log(`Loading agent file from ${config.agent_file}`);
         this.agentPrompt = fs.readFileSync(config.agent_file, "utf-8");
       } else {
-        console.warn(`Agent file not found or undefined for model ID '${modelId}'. Using default prompt.`);
-        this.agentPrompt = "You are a helpful assistant.";
+//        console.warn(`Agent file not found or undefined for model ID '${modelId}'. Using default prompt.`);
+//        this.agentPrompt = "You are a helpful assistant.";
+        throw new Error(`Agent file not found or undefined for model ID '${modelId}'. Using default prompt.`);
       }
 
     } else if (mode === "file") {
@@ -432,12 +442,18 @@ export class ConversationManager {
    * @notice Adds a message to the conversation history with a timestamp.
    * @param {string} content - The content of the message.
    * @param {string} [role="user"] - The role of the message.
+   * @throws Will throw an error if the content is empty or only contains whitespace.
    */
   addMessage(content, role = "user") {
+    if (!content || content.trim().length === 0) {
+      throw new Error('Message content cannot be empty.');
+    }
+
     const timestamp = new Date().toISOString();
     this.messages.push({ role, content, timestamp });
     this.trimHistory();  // Ensure total tokens stay within `conversationMaxTokens`
   }
+
 
   /**
    * @notice Trims the conversation history to stay within token and message limits.

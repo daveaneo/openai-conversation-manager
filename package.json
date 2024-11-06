@@ -6,13 +6,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node examples/startNewConversation.js",
-    "test": "echo \"No test specified\" && exit 1"
+    "test": "mocha --require @babel/register 'tests/**/*.test.js'"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
+    "fs-extra": "^10.1.0",
     "node-fetch": "^3.2.0",
-    "yargs": "^17.7.2",
-    "fs-extra": "^10.1.0"
+    "yargs": "^17.7.2"
   },
   "keywords": [
     "openai",
@@ -32,5 +32,13 @@
   "bugs": {
     "url": "https://github.com/yourusername/openai-conversation-manager/issues"
   },
-  "homepage": "https://github.com/yourusername/openai-conversation-manager#readme"
+  "homepage": "https://github.com/yourusername/openai-conversation-manager#readme",
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/register": "^7.25.9",
+    "chai": "^5.1.2",
+    "mocha": "^10.8.2",
+    "sinon": "^19.0.2"
+  }
 }
