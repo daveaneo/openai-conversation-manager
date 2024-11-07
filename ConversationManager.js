@@ -9,6 +9,12 @@
 //import fetch from 'node-fetch';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 (async () => {
   if (typeof global.fetch === 'undefined') {
@@ -17,10 +23,17 @@ import dotenv from 'dotenv';
   }
 })();
 
-
-
 // Load environment variables
 dotenv.config();
+
+
+const defaultConfig = {
+  model: "gpt-4o-mini",
+  temperature: 0.7,
+  logPath: "logs",
+  conversationMaxTokens: 500,
+  responseTokens: 100,
+};
 
 /**
  * @notice Loads configuration settings from a JSON file.
@@ -29,25 +42,32 @@ dotenv.config();
  * @return {Object} The parsed JSON configuration data or default settings if loading fails.
  */
 const loadConfig = (modelId = null) => {
+  const configPath = process.env.CONFIG_PATH || path.resolve(process.cwd(), 'config.json');
+  const exampleConfigPath = path.resolve(__dirname, 'config.example.json');
+
   try {
-    const configData = fs.readFileSync('config.json', 'utf-8');
-    const config = JSON.parse(configData);
-
-    // If a modelId is specified and exists in models, retrieve it; otherwise, return defaults
-    if (modelId && config.models && config.models[modelId]) {
-      return config.models[modelId];
+    if (fs.existsSync(configPath)) {
+      const configData = fs.readFileSync(configPath, 'utf-8');
+      const config = JSON.parse(configData);
+      if (modelId && config.models && config.models[modelId]) {
+        return config.models[modelId];
+      }
+      return config.defaults;
+    } else if (fs.existsSync(exampleConfigPath)) {
+      const exampleConfigData = fs.readFileSync(exampleConfigPath, 'utf-8');
+      console.warn(`Config file not found at ${configPath}. Using example configuration from ${exampleConfigPath}.`);
+      const exampleConfig = JSON.parse(exampleConfigData);
+      if (modelId && exampleConfig.models && exampleConfig.models[modelId]) {
+        return exampleConfig.models[modelId];
+      }
+      return exampleConfig.defaults;
+    } else {
+      console.error(`Both ${configPath} and ${exampleConfigPath} not found. Falling back to hard-coded default configuration.`);
+      return defaultConfig;
     }
-
-    return config.defaults;
   } catch (error) {
-    console.error("Error loading config.json. Please ensure it exists and is valid JSON:", error.message);
-    return {
-      model: "gpt-4o-mini",
-      temperature: 0.7,
-      logPath: "logs",
-      conversationMaxTokens: 500,
-      responseTokens: 100,
-    };
+    console.error("Error loading configuration. Falling back to default configuration:", error.message);
+    return defaultConfig;
   }
 };
 
