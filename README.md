@@ -36,6 +36,7 @@ This script sends prompts to the OpenAI API using various input modes, allowing 
 ### `.env` File Example
 ```bash
 OPENAI_API_KEY=your_openai_api_key_here
+CONFIG_PATH=path_to_config_file
 ```
 
 # Conversation Manager Documentation
