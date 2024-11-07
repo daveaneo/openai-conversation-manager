@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node examples/startNewConversation.js",
+    "single": "node examples/singleUsage.js",
     "test": "mocha --require @babel/register 'tests/**/*.test.js'"
   },
   "dependencies": {

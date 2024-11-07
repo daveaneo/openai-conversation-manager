@@ -2,4 +2,5 @@
 .env
 examples/
 logs/
+config.json
 node_modules/

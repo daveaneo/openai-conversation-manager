@@ -24,7 +24,7 @@ import { ConversationManager } from '../ConversationManager.js';
     conversation.setSystem("config", { modelId: "poet" });
 
     // Add a single user message
-    conversation.addMessage("I need some empathy. Can you help me understand my feelings? Please limit your response to 25 words.");
+    conversation.addMessage("I'm feeling blue. Cheer me up. Please limit your response to 25 words.");
 
     // Send the message to the OpenAI API and get a response
     const response = await conversation.callAPI();

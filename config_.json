@@ -8,7 +8,7 @@
   },
   "models": {
     "poet": {
-      "agent_file": "agents/poet.txt",
+      "agent_file": "agents/poet2.txt",
       "conversationMaxTokens": 300,
       "responseTokens": 75,
       "temperature": 0.6,

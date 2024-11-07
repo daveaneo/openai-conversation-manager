@@ -45,6 +45,9 @@ const loadConfig = (modelId = null) => {
   const configPath = process.env.CONFIG_PATH || path.resolve(process.cwd(), 'config.json');
   const exampleConfigPath = path.resolve(__dirname, 'config.example.json');
 
+  console.log("configPath: ", configPath)
+  console.log("exampleConfigPath: ", exampleConfigPath)
+
   try {
     if (fs.existsSync(configPath)) {
       const configData = fs.readFileSync(configPath, 'utf-8');
