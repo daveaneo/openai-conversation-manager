@@ -273,7 +273,7 @@ export class ConversationManager {
     this.apiHandler = new APIHandler(apiKey, config.model);
 
     // Add default system message
-    this.messages.push({ role: "system", content: "You are a helpful assistant." });
+//    this.messages.push({ role: "system", content: "You are a helpful assistant." });
 
     // Apply default configurations
     this.temperature = config.temperature;
