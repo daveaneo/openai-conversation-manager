@@ -1,6 +1,6 @@
 {
   "name": "openai-conversation-manager",
-  "version": "0.9.01",
+  "version": "0.9.02",
   "description": "A library for managing OpenAI conversations with persistent user sessions and customizable prompts.",
   "type": "module",
   "main": "index.js",

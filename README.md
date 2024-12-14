@@ -6,6 +6,7 @@ This script allows you to interact with OpenAI's API to generate responses based
 ## Table of Contents
 
 - [Overview](#overview)
+- [Installation](#installation)
 - [Prerequisites](#prerequisites)
 - [Usage Modes](#usage-modes)
   - [JSON Config Mode](#json-config-mode)
@@ -27,6 +28,13 @@ This script sends prompts to the OpenAI API using various input modes, allowing 
 1. Load agent prompts and settings from a JSON configuration file.
 2. Use direct file paths or input strings for both agent and user prompts.
 3. Retain context for ongoing conversations by including previous exchanges in each request.
+
+## Installation
+
+### Install from NPM (lite version)
+`npm install openai-conversation-manager`
+### Install from Github
+`git clone https://github.com/daveaneo/openai-conversation-manager.git`
 
 ## Prerequisites
 
