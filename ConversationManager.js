@@ -341,11 +341,26 @@ export class ConversationManager {
 
   /**
    * @notice Sets an existing conversation as the active conversation by ID.
-   * @param {string} conversationId - The conversation ID to set as active.
+   * @param {string|number} conversationId - The conversation ID to set as active.
    */
   setActiveConversation(conversationId) {
+    // Validate and convert to an integer if possible
+    if (typeof conversationId === 'string' || typeof conversationId === 'number') {
+      const parsedId = Number(conversationId);
+      if (!Number.isInteger(parsedId)) {
+        console.warn(`Invalid conversation ID: ${conversationId}. Must be an integer.`);
+        return;
+      }
+      // Convert the integer back to a string
+      conversationId = String(parsedId);
+    } else {
+      console.warn(`Invalid conversation ID type: ${typeof conversationId}.`);
+      return;
+    }
+
     const userData = this.logger.loadUserData(this.userId);
     const conversation = userData.conversations.find(convo => convo.conversationId === conversationId);
+
     if (conversation) {
       this.activeConversationId = conversationId;
       this.messages = conversation.messages;
@@ -353,6 +368,7 @@ export class ConversationManager {
       console.warn(`Conversation with ID ${conversationId} not found.`);
     }
   }
+
 
   /**
    * @notice Adds a system message to the conversation.

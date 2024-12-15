@@ -122,7 +122,7 @@ const history = conversation.getHistory(true); // Retrieve history without syste
 console.log(history);
 ```
 
-### Method: `loadConversationById`
+### Method: `setActiveConversation`
 
 **Usage**: Loads a specific conversation by its unique `conversationId` for a user, setting it as the active conversation.
 
@@ -130,7 +130,7 @@ console.log(history);
 
 **Example**:
 ```javascript
-conversation.loadConversationById("2"); // Loads conversation with ID "2" for the user
+conversation.setActiveConversation("2"); // Loads conversation with ID "2" for the user
 ```
 
 ### Additional Methods
