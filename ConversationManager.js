@@ -33,6 +33,7 @@ const defaultConfig = {
   logPath: "logs",
   conversationMaxTokens: 500,
   responseTokens: 100,
+  verbosity = "silent"
 };
 
 /**
@@ -45,8 +46,9 @@ const loadConfig = (modelId = null) => {
   const configPath = process.env.CONFIG_PATH || path.resolve(process.cwd(), 'config.json');
   const exampleConfigPath = path.resolve(__dirname, 'config.example.json');
 
-  console.log("configPath: ", configPath)
-  console.log("exampleConfigPath: ", exampleConfigPath)
+
+//  console.log("configPath: ", configPath)
+//  console.log("exampleConfigPath: ", exampleConfigPath)
 
   try {
     if (fs.existsSync(configPath)) {
@@ -176,7 +178,9 @@ export class Logger {
       return data;
     } catch (error) {
       // Return a default structure if the file does not exist
-      console.log(`No existing user data for user: ${userId}. Initializing new data.`);
+      if (config.verbosity != "silent"){
+        console.log(`No existing user data for user: ${userId}. Initializing new data.`);
+      }
       return { userId, totalConversations: 0, conversations: [] };
     }
   }
@@ -189,7 +193,9 @@ export class Logger {
   saveUserData(userId, userData) {
     const filePath = `${this.logPath}/${userId}.json`;
     fs.writeFileSync(filePath, JSON.stringify(userData, null, 2));
-    console.log(`Saved data for user: ${userId}`);
+    if (config.verbosity != "silent"){
+      console.log(`Saved data for user: ${userId}`);
+    }
   }
 
   /**
@@ -223,7 +229,9 @@ export class Logger {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const logFileName = `${this.logPath}/${userId}_${timestamp}.json`;
     fs.writeFileSync(logFileName, JSON.stringify(messages, null, 2));
-    console.log(`Logged conversation for user: ${userId} at ${logFileName}`);
+    if (config.verbosity != "silent"){
+      console.log(`Logged conversation for user: ${userId} at ${logFileName}`);
+    }
   }
 }
 
@@ -281,7 +289,9 @@ export class ConversationManager {
     this.responseTokens = config.responseTokens;
     this.systemSet = true;  // Mark system as set to prevent reloading
 
-    console.log("Default system settings applied.");
+    if (config.verbosity != "silent"){
+      console.log("Default system settings applied.");
+    }
   }
 
   /**
@@ -304,7 +314,10 @@ export class ConversationManager {
 
     // Generate a name for the conversation based on the first message
     this.conversationName = `Conversation ${this.activeConversationId}`;
-    console.log(`Starting new conversation with ID: ${this.activeConversationId}`);
+
+    if (config.verbosity != "silent"){
+      console.log(`Starting new conversation with ID: ${this.activeConversationId}`);
+    }
   }
 
   /**
@@ -365,15 +378,22 @@ export class ConversationManager {
     try {
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
-        console.log(`Conversation history file for conversation ${this.activeConversationId} deleted.`);
+
+        if (config.verbosity != "silent"){
+         console.log(`Conversation history file for conversation ${this.activeConversationId} deleted.`);
+        }
+
       } else {
-        console.log(`No history file found for conversation ${this.activeConversationId}.`);
+        if (config.verbosity != "silent"){
+          console.log(`No history file found for conversation ${this.activeConversationId}.`);
+        }
       }
     } catch (error) {
       console.error(`Error deleting history file for conversation ${this.activeConversationId}:`, error.message);
     }
-
-    console.log("Conversation history cleared, system settings retained.");
+    if (config.verbosity != "silent"){
+      console.log("Conversation history cleared, system settings retained.");
+    }
   }
 
   /**
@@ -388,7 +408,9 @@ export class ConversationManager {
   setSystem(mode = "config", options = {}) {
     // If the system has already been set, clear existing settings and log the update
     if (this.systemSet) {
-      console.log("System is already set. Updating agent and system settings...");
+      if (config.verbosity != "silent"){
+        console.log("System is already set. Updating agent and system settings...");
+      }
       // Remove any existing system message
       this.messages = this.messages.filter(msg => msg.role !== "system");
       // Reset system variables
@@ -417,7 +439,9 @@ export class ConversationManager {
       config = { ...config, ...loadedConfig };  // Merge defaults with loaded config
 
       if (config.agent_file && fs.existsSync(config.agent_file)) {
-        console.log(`Loading agent file from ${config.agent_file}`);
+        if (config.verbosity != "silent"){
+          console.log(`Loading agent file from ${config.agent_file}`);
+        }
         this.agentPrompt = fs.readFileSync(config.agent_file, "utf-8");
       } else {
 //        console.warn(`Agent file not found or undefined for model ID '${modelId}'. Using default prompt.`);
@@ -433,7 +457,9 @@ export class ConversationManager {
       config.responseTokens = options.responseTokens || config.responseTokens;
 
       if (options.agentFilePath && fs.existsSync(options.agentFilePath)) {
-        console.log(`Loading agent file from ${options.agentFilePath}`);
+        if (config.verbosity != "silent"){
+          console.log(`Loading agent file from ${options.agentFilePath}`);
+        }
         this.agentPrompt = fs.readFileSync(options.agentFilePath, "utf-8");
       } else {
         throw new Error("Agent file path is missing or invalid in 'file' mode.");
